@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HoverTextScreen(),
+    );
+  }
+}
+
+class HoverTextScreen extends StatefulWidget {
+  const HoverTextScreen({super.key});
+
+  @override
+  State<HoverTextScreen> createState() => _HoverTextScreenState();
+}
+
+class _HoverTextScreenState extends State<HoverTextScreen> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: MouseRegion(
+          onEnter: (_) {
+            setState(() {
+              _isHovering = true;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              _isHovering = false;
+            });
+          },
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            style: TextStyle(
+              fontSize: _isHovering ? 32 : 24,
+              color: _isHovering ? Colors.blue : Colors.black,
+              fontWeight: _isHovering ? FontWeight.bold : FontWeight.normal,
+              decoration:
+                  _isHovering ? TextDecoration.underline : TextDecoration.none,
+            ),
+            child: const Text("Hover over me"),
+          ),
+        ),
+      ),
+    );
+  }
+}

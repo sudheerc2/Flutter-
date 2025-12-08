@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CustomContainerScreen(),
+    );
+  }
+}
+
+class CustomContainerScreen extends StatelessWidget {
+  const CustomContainerScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      body: Center(
+        child: Container(
+          width: 300,
+          height: 160,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.blueGrey,
+              width: 2,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 8,
+                offset: Offset(0, 4),
+                spreadRadius: 1,
+                color: Colors.black26,
+              ),
+            ],
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Title Text',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'This is some description inside the custom container. '
+                'You can style it as needed.',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
