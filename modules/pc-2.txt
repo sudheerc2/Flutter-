@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Login")),
+      
+      // ✅ THIS IS THE CORRECT SOLUTION
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 30), // Avoid overflow by 30px
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+            ),
+
+            const SizedBox(height: 300), // Forces overflow without scroll
+
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Login"),
+            ),
+
+            const SizedBox(height: 30), // Extra safety space
+          ],
+        ),
+      ),
+    );
+  }
+}
