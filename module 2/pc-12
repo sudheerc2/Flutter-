@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DatePickerExample(),
+    );
+  }
+}
+
+class DatePickerExample extends StatefulWidget {
+  const DatePickerExample({super.key});
+
+  @override
+  State<DatePickerExample> createState() => _DatePickerExampleState();
+}
+
+class _DatePickerExampleState extends State<DatePickerExample> {
+  DateTime? startDate;
+  DateTime? endDate;
+
+  Future<void> pickStartDate() async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        startDate = selectedDate;
+
+        // 🟢 End date = 29 days before start date
+        endDate = selectedDate.subtract(const Duration(days: 29));
+      });
+    }
+  }
+
+  String format(DateTime? date) {
+    if (date == null) return "--";
+    return "${date.day}/${date.month}/${date.year}";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Date Picker Logic")),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ElevatedButton(
+              onPressed: pickStartDate,
+              child: const Text("Select Start Date"),
+            ),
+
+            const SizedBox(height: 20),
+
+            Text(
+              "Start Date:  ${format(startDate)}",
+              style: const TextStyle(fontSize: 18),
+            ),
+
+            const SizedBox(height: 10),
+
+            Text(
+              "End Date (29 days earlier):  ${format(endDate)}",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
