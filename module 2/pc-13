@@ -1,0 +1,67 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ClockScreen(),
+    );
+  }
+}
+
+class ClockScreen extends StatefulWidget {
+  const ClockScreen({super.key});
+
+  @override
+  State<ClockScreen> createState() => _ClockScreenState();
+}
+
+class _ClockScreenState extends State<ClockScreen> {
+  late DateTime now;
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    now = DateTime.now();
+
+    // 🔥 Clock updates every 1 second
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        now = DateTime.now();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel(); // stop timer when screen closes
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Clock Example")),
+      body: Center(
+        child: Text(
+          "${now.hour.toString().padLeft(2, '0')}:"
+          "${now.minute.toString().padLeft(2, '0')}:"
+          "${now.second.toString().padLeft(2, '0')}",
+          style: const TextStyle(
+            fontSize: 48,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
