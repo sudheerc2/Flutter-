@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DrawingScreen(),
+    );
+  }
+}
+
+class DrawingScreen extends StatefulWidget {
+  const DrawingScreen({super.key});
+
+  @override
+  State<DrawingScreen> createState() => _DrawingScreenState();
+}
+
+class _DrawingScreenState extends State<DrawingScreen> {
+  // store points of the stroke; use null to separate strokes
+  final List<Offset?> _points = [];
+
+  void _clearCanvas() {
+    setState(() {
+      _points.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Simple Drawing App'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.clear),
+            tooltip: 'Clear',
+            onPressed: _clearCanvas,
+          )
+        ],
+      ),
+      // white background as required
+      body: Container(
+        color: Colors.white,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanStart: (details) {
+            setState(() {
+              _points.add(details.localPosition);
+            });
+          },
+          onPanUpdate: (details) {
+            setState(() {
+              _points.add(details.localPosition);
+            });
+          },
+          onPanEnd: (details) {
+            // separator for stroke
+            setState(() {
+              _points.add(null);
+            });
+          },
+          child: CustomPaint(
+            painter: _DrawingPainter(points: _points),
+            size: Size.infinite,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Clear',
+        child: const Icon(Icons.delete),
+        onPressed: _clearCanvas,
+      ),
+    );
+  }
+}
+
+class _DrawingPainter extends CustomPainter {
+  final List<Offset?> points;
+  _DrawingPainter({required this.points});
+
+  final Paint _paint = Paint()
+    ..color = Colors.black
+    ..strokeWidth = 4.0
+    ..strokeCap = StrokeCap.round
+    ..style = PaintingStyle.stroke;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // draw each stroke by connecting points until a null separator
+    for (int i = 0; i < points.length - 1; i++) {
+      final p1 = points[i];
+      final p2 = points[i + 1];
+      if (p1 != null && p2 != null) {
+        canvas.drawLine(p1, p2, _paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DrawingPainter oldDelegate) =>
+      oldDelegate.points != points;
+}
